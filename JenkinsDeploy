@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'pod' }
+    agent { label 'prod' }
 
     triggers {
         githubPush()
