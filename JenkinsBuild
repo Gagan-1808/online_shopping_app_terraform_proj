@@ -55,7 +55,7 @@ pipeline {
                     // Example test: check if container is running
                     sh """
                         sleep 15
-                        sudo docker ps | grep myapp-test
+                        sudo docker ps | grep onlineapp-test
                     """
                 }
             }
