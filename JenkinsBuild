@@ -6,14 +6,14 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = "raichu08/myapp"
+        IMAGE_NAME = "raichu08/onlineshop"
         IMAGE_TAG = "v${BUILD_NUMBER}"
     }
 
     stages {
 
         stage('Checkout Code') {
-            agent { label 'test' }
+            agent { label 'dev' }
             steps {
                 echo "Fetching latest code from GitHub..."
                 checkout scm
@@ -22,7 +22,7 @@ pipeline {
     
 
         stage('Build Docker Image') {
-           agent { label 'test' }
+           agent { label 'dev' }
             steps {
                 script {
                     echo "Building Docker image..."
@@ -35,12 +35,12 @@ pipeline {
         
 
         stage('Run Docker Container') {
-           agent { label 'test' }
+           agent { label 'dev' }
             steps {
                 script {
                     echo "Running container for testing..."
                     sh """
-                        sudo docker run -d --name myapp-test -p 80:80 ${IMAGE_NAME}:${IMAGE_TAG}
+                        sudo docker run -d --name onlineapp-test -p 80:80 ${IMAGE_NAME}:${IMAGE_TAG}
                     """
                 }
             }
@@ -48,7 +48,7 @@ pipeline {
         
 
         stage('Test Docker Container') {
-            agent { label 'test' }
+            agent { label 'dev' }
             steps {
                 script {
                     echo "Testing container health..."
@@ -62,7 +62,7 @@ pipeline {
         }
 
         stage('Push to Dockerhub and Logout') {
-            agent { label 'test' }
+            agent { label 'dev' }
             when {
                 expression { currentBuild.currentResult == "SUCCESS" }
             }
@@ -89,7 +89,7 @@ pipeline {
     post {
         success {
             echo "Docker Build, Test and Push completed successfully! Now cleaning up"
-            node('test') {
+            node('dev') {
                 script {
                     sh """ 
                     sudo docker stop myapp-test
@@ -101,7 +101,7 @@ pipeline {
         }
         failure {
             echo "Docker Build, Test and Push failed! Now cleaning up"
-            node('test') {
+            node('dev') {
                 script {
                     sh """ 
                     sudo docker stop myapp-test
