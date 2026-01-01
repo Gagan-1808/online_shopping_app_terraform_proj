@@ -4,6 +4,9 @@ pipeline {
     triggers {
         githubPush()
         }
+    environment {
+        K8S_DIR    = "K8"
+        }
     stages {
         
         stage('Deploy to K8 cluster') {
@@ -11,8 +14,8 @@ pipeline {
                 script {
                     echo "Deploying..."
                     sh """
-                        kubectl apply -f deployment.yml
-                        kubectl apply -f service.yml
+                        kubectl apply -f ${K8S_DIR}/deployment.yml
+                        kubectl apply -f ${K8S_DIR}/service.yml
                     """
                 }
             }
@@ -24,7 +27,7 @@ pipeline {
                     echo "test deployment.."
                     sh """
                         sleep 10
-                        kubectl rollout status deployment/myapp --timeout=120s
+                        kubectl rollout status deployment/onlineshop --timeout=120s
                         kubectl wait --for=condition=Ready pod -l app=pdd --timeout=120s
                     """
                 }
