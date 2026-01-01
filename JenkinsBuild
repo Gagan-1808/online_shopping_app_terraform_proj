@@ -54,7 +54,7 @@ pipeline {
                     echo "Testing container health..."
                     // Example test: check if container is running
                     sh """
-                        sleep 10
+                        sleep 15
                         sudo docker ps | grep myapp-test
                     """
                 }
@@ -92,8 +92,8 @@ pipeline {
             node('dev') {
                 script {
                     sh """ 
-                    sudo docker stop myapp-test
-                    sudo docker rm myapp-test
+                    sudo docker stop onlineapp-test
+                    sudo docker rm onlineapp-test
                     sudo docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true
                     """
                 }
@@ -104,8 +104,8 @@ pipeline {
             node('dev') {
                 script {
                     sh """ 
-                    sudo docker stop myapp-test
-                    sudo docker rm myapp-test
+                    sudo docker stop onlineapp-test
+                    sudo docker rm onlineapp-test
                     sudo docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true
                     """
                 }
