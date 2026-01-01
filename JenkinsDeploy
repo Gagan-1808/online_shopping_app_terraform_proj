@@ -8,7 +8,16 @@ pipeline {
         K8S_DIR    = "K8"
         }
     stages {
-        
+        stage('Debug kubectl') {
+    steps {
+        sh '''
+          whoami
+          echo $PATH
+          kubectl version --client
+        '''
+        }
+    }
+    
         stage('Deploy to K8 cluster') {
            steps {
                 script {
