@@ -8,6 +8,7 @@ pipeline {
     environment {
         IMAGE_NAME = "raichu08/onlineshop"
         IMAGE_TAG = "v${BUILD_NUMBER}"
+        TAG=$(git rev-parse --short HEAD)
     }
 
     stages {
@@ -27,7 +28,7 @@ pipeline {
                 script {
                     echo "Building Docker image..."
                     sh """
-                        sudo docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                        sudo docker build -t ${IMAGE_NAME}:${TAG} .
                     """
                 }
             }
